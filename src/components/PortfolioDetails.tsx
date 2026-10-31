@@ -441,7 +441,7 @@ function PortfolioResearch({
     <section className="portfolio-research" aria-labelledby="portfolio-research-title">
       <div className="portfolio-research-heading">
         <div>
-          <p className="eyebrow">LOCAL AI REVIEW</p>
+          <p className="eyebrow">OLLAMA AI REVIEW</p>
           <h3 id="portfolio-research-title">Portfolio signals</h3>
         </div>
         <button
@@ -450,19 +450,21 @@ function PortfolioResearch({
           disabled={loading}
           onClick={onAnalyze}
         >
-          {loading ? 'Analyzing locally…' : insights ? 'Analyze again' : 'Analyze locally'}
+          {loading ? 'Analyzing…' : insights ? 'Analyze again' : 'Analyze with Ollama'}
         </button>
       </div>
       <p className="portfolio-research-disclosure">
         Runs only when you click. Fund names, invested/current values, returns,
-        age, and portfolio share are sent to Ollama running on this computer;
-        the PDF is not. No live market, fund, or global news data is used.
-        Signals are educational, not trade instructions. A 12% annual return
-        is an aspiration, not a forecast or guarantee.
+        age, and portfolio share are sent to the configured Ollama model; the
+        PDF is not. With a cloud model, this information is processed by Ollama
+        Cloud. No live market, fund, or global news data is used. Signals are
+        educational, not trade instructions. A 12% annual return is an
+        aspiration, not a forecast or guarantee.
       </p>
       {loading && (
         <p className="portfolio-research-status" role="status">
-          Reviewing statement metrics with the local model…
+          Reviewing statement metrics with Ollama. The first response may take
+          a few minutes…
         </p>
       )}
       {error && (
@@ -557,7 +559,7 @@ function PortfolioDetails({ pdfLines, error }: PortfolioDetailsProps) {
       setInsightsError(
         error instanceof Error
           ? error.message
-          : 'Could not analyze the portfolio with the local model.',
+          : 'Could not analyze the portfolio with Ollama.',
       )
     } finally {
       setInsightsLoading(false)

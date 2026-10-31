@@ -2,6 +2,17 @@ import type { PDFDocumentLoadingTask, PDFDocumentProxy } from 'pdfjs-dist'
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import type { PdfTextLine } from './portfolioAnalysis'
 
+export class PdfPasswordError extends Error {
+  constructor(reason: 'required' | 'incorrect') {
+    super(
+      reason === 'required'
+        ? 'This PDF is password-protected. Enter its password to continue.'
+        : 'That password was not accepted. Try again.',
+    )
+    this.name = 'PdfPasswordError'
+  }
+}
+
 function isPasswordException(
   error: unknown,
 ): error is Error & { code: number } {
@@ -83,10 +94,10 @@ export async function extractPortfolioPdfText(
     }
     if (isPasswordException(error)) {
       const { PasswordResponses } = await import('pdfjs-dist')
-      throw new Error(
+      throw new PdfPasswordError(
         error.code === PasswordResponses.NEED_PASSWORD
-          ? 'This PDF requires a password. Set VITE_STRATEGY_PDF_PASSWORD in .env.local.'
-          : 'The configured PDF password was rejected. Check VITE_STRATEGY_PDF_PASSWORD in .env.local.',
+          ? 'required'
+          : 'incorrect',
       )
     }
     throw error

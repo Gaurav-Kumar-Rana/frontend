@@ -91,12 +91,12 @@ export async function requestPortfolioInsights(
       payload && typeof payload === 'object' && 'error' in payload &&
       typeof payload.error === 'string'
         ? payload.error
-        : 'The local model could not analyze the portfolio.'
+        : 'The Ollama model could not analyze the portfolio.'
     throw new Error(message)
   }
 
   if (!isPortfolioInsights(payload)) {
-    throw new Error('The local model returned an unexpected analysis response.')
+    throw new Error('The Ollama model returned an unexpected analysis response.')
   }
 
   return payload

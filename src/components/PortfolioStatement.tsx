@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { extractPortfolioPdfText } from '../services/portfolioPdf'
+import {
+  extractPortfolioPdfText,
+  PdfPasswordError,
+} from '../services/portfolioPdf'
 import type { PdfTextLine } from '../services/portfolioAnalysis'
 import PortfolioDetails from './PortfolioDetails'
-
-const PDF_PASSWORD = import.meta.env.VITE_STRATEGY_PDF_PASSWORD ?? ''
 
 interface PortfolioStatementProps {
   file: File
@@ -13,6 +14,10 @@ interface PortfolioStatementProps {
 function PortfolioStatement({ file, pdfUrl }: PortfolioStatementProps) {
   const [pdfLines, setPdfLines] = useState<PdfTextLine[] | null>(null)
   const [pdfTextError, setPdfTextError] = useState<string | null>(null)
+  const [password, setPassword] = useState('')
+  const [submittedPassword, setSubmittedPassword] = useState('')
+  const [passwordMessage, setPasswordMessage] = useState<string | null>(null)
+  const [passwordAttempt, setPasswordAttempt] = useState(0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -22,7 +27,7 @@ function PortfolioStatement({ file, pdfUrl }: PortfolioStatementProps) {
       try {
         const extractedLines = await extractPortfolioPdfText(
           file,
-          PDF_PASSWORD,
+          submittedPassword,
           controller.signal,
         )
         if (!controller.signal.aborted) {
@@ -30,11 +35,15 @@ function PortfolioStatement({ file, pdfUrl }: PortfolioStatementProps) {
         }
       } catch (error) {
         if (!controller.signal.aborted) {
-          setPdfTextError(
-            error instanceof Error
-              ? error.message
-              : 'Unable to extract text from the PDF.',
-          )
+          if (error instanceof PdfPasswordError) {
+            setPasswordMessage(error.message)
+          } else {
+            setPdfTextError(
+              error instanceof Error
+                ? error.message
+                : 'Unable to extract text from the PDF.',
+            )
+          }
         }
       } finally {
         if (!controller.signal.aborted) {
@@ -48,7 +57,7 @@ function PortfolioStatement({ file, pdfUrl }: PortfolioStatementProps) {
     return () => {
       controller.abort()
     }
-  }, [file])
+  }, [file, submittedPassword, passwordAttempt])
 
   return (
     <section className="statement-panel" aria-labelledby="statement-title">
@@ -65,7 +74,40 @@ function PortfolioStatement({ file, pdfUrl }: PortfolioStatementProps) {
         </div>
       )}
 
-      {!loading && (
+      {!loading && passwordMessage && (
+        <form
+          className="statement-password"
+          onSubmit={(event) => {
+            event.preventDefault()
+            setLoading(true)
+            setPdfTextError(null)
+            setPasswordMessage(null)
+            setSubmittedPassword(password)
+            setPasswordAttempt((attempt) => attempt + 1)
+          }}
+        >
+          <label htmlFor="statement-password">PDF password</label>
+          <p role="alert">{passwordMessage}</p>
+          <div className="statement-password-controls">
+            <input
+              id="statement-password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.currentTarget.value)}
+              required
+            />
+            <button
+              className="action-button action-button-primary"
+              type="submit"
+            >
+              Unlock PDF
+            </button>
+          </div>
+        </form>
+      )}
+
+      {!loading && !passwordMessage && (
         <PortfolioDetails pdfLines={pdfLines} error={pdfTextError} />
       )}
 

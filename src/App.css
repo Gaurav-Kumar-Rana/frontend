@@ -718,6 +718,45 @@
   text-align: center;
 }
 
+.statement-password {
+  padding: 24px;
+}
+
+.statement-password label {
+  display: block;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.statement-password p {
+  margin: 8px 0 14px;
+  color: #a63e47;
+  font-size: 13px;
+}
+
+.statement-password-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.statement-password-controls input {
+  min-width: 220px;
+  min-height: 40px;
+  flex: 1;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--ink);
+  font: inherit;
+}
+
+.statement-password-controls input:focus-visible {
+  outline: 3px solid #c9b8ff;
+  outline-offset: 2px;
+}
+
 @media (max-width: 640px) {
   .app-shell {
     padding: 26px 16px;

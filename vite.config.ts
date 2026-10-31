@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
       react(),
       localPortfolioInsightsPlugin({
         host: process.env.OLLAMA_HOST ?? env.OLLAMA_HOST ?? 'http://127.0.0.1:11434',
-        model: process.env.OLLAMA_MODEL ?? env.OLLAMA_MODEL ?? 'qwen3:4b',
+        model: process.env.OLLAMA_MODEL ?? env.OLLAMA_MODEL ?? 'beam:cloud',
       }),
     ],
     server: {

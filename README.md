@@ -6,8 +6,7 @@ processed locally in your browser and is not sent to a server.
 
 ## Run locally
 
-1. If your statement PDF is password-protected, copy `.env.example` to
-   `.env.local` and set `VITE_STRATEGY_PDF_PASSWORD` to its password.
+1. Copy `.env.example` to `.env.local` if you want to configure Ollama.
 2. Start the app:
 
    ```sh
@@ -16,38 +15,39 @@ processed locally in your browser and is not sent to a server.
    ```
 
 Vite runs on port 3000 and will report an error if that port is already in use.
-Select **Choose PDF** in the app to upload your statement. Files larger than
-25 MB are not accepted. After changing `.env.local`, restart Vite for changes
-to take effect.
+Select **Choose PDF** in the app to upload your statement. If it is
+password-protected, enter its password when prompted. Files larger than 25 MB
+are not accepted.
 
-## Local AI setup
+## Ollama Cloud setup
 
-Install [Ollama](https://ollama.com/download), start it, then download the
-default model from a terminal:
+Install [Ollama](https://ollama.com/download), open the app, and sign in to
+enable cloud models. The default model is `beam:cloud`; cloud models do not
+need to be downloaded. You can try it from the terminal with:
 
 ```sh
-ollama pull qwen3:4b
+ollama run beam:cloud
 ```
 
-The app connects to Ollama at `http://127.0.0.1:11434` by default. Override
-`OLLAMA_HOST` or `OLLAMA_MODEL` in `.env.local` if needed, then restart Vite.
-The analysis runs locally and does not require an AI API key or incur hosted
-AI request quotas. Model downloads require an internet connection and local
-disk space; generation speed and capacity depend on your computer.
+The app connects to the Ollama service at `http://127.0.0.1:11434` by default.
+Override `OLLAMA_HOST` or `OLLAMA_MODEL` in `.env.local` if needed, then restart
+Vite. Ollama processes cloud prompts and responses to provide the analysis;
+see the [Ollama privacy policy](https://ollama.com/privacy) and
+[usage plans](https://ollama.com/pricing).
 
-The **Analyze locally** button is explicit and optional. It sends fund names
-and statement-derived invested/current values, returns, holding age, and
-portfolio share to Ollama on your computer; it does not send the PDF. This
-mode has no live market, fund, or global news access. Signals are educational,
-not trade instructions or personalized financial advice. The 12% annual-return
-goal is aspirational and is not guaranteed or forecast; a statement snapshot
-cannot establish suitability without risk tolerance, investment goals, and
-time horizon. The local development/preview endpoint is intended for local
-use only.
+The **Analyze with Ollama** action is explicit and optional. It sends fund
+names and statement-derived invested/current values, returns, holding age, and
+portfolio share to the configured Ollama model; it does not send the PDF. With
+`beam:cloud`, this information is processed by Ollama Cloud. No live market,
+fund, or global news data is provided. Signals are educational, not trade
+instructions or personalized financial advice. The 12% annual-return goal is
+aspirational and is not guaranteed or forecast; a statement snapshot cannot
+establish suitability without risk tolerance, investment goals, and time
+horizon. The local development/preview endpoint is intended for local use only.
 
-> **Password security:** `VITE_` variables are embedded in client-side code.
-> Anyone who can access the app can inspect this PDF password. Use this only
-> for a trusted local app; do not deploy a password this way.
+The PDF password is requested only when needed and is kept in browser memory
+for the current page session. It is not stored in `.env.local` or sent to a
+server.
 
 The portfolio overview reads scheme name, weighted-average age, invested and
 current values, and annualized XIRR from Section 2 (“By Mutual Fund”) of the
