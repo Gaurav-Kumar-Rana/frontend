@@ -3,7 +3,7 @@
   padding: 48px 24px;
 }
 
-.mail-app {
+.portfolio-app {
   width: min(100%, 980px);
   margin: 0 auto;
 }
@@ -38,23 +38,12 @@
   font-weight: 700;
 }
 
-.connection-status,
-.inbox-count {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.portfolio-note {
   color: var(--muted);
   font-size: 13px;
 }
 
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #42a77a;
-}
-
-.inbox-heading {
+.page-heading {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -70,8 +59,7 @@
   letter-spacing: 1.5px;
 }
 
-.inbox-heading h1,
-.setup-card h1 {
+.page-heading h1 {
   margin: 0;
   color: var(--ink);
   font-size: clamp(30px, 5vw, 40px);
@@ -80,16 +68,10 @@
   line-height: 1.15;
 }
 
-.inbox-heading p {
+.page-heading p {
   margin: 9px 0 0;
   color: var(--muted);
   font-size: 14px;
-}
-
-.heading-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .action-button {
@@ -123,7 +105,7 @@
 }
 
 .action-button:focus-visible,
-.email-link:focus-visible {
+.statement-source a:focus-visible {
   outline: 3px solid #c9b8ff;
   outline-offset: 3px;
 }
@@ -144,12 +126,53 @@
   background: var(--accent-hover);
 }
 
-.email-panel {
-  overflow: hidden;
+.upload-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 20px 22px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 14px 40px rgb(34 24 65 / 5%);
+}
+
+.upload-panel > div {
+  flex: 1 1 300px;
+}
+
+.upload-panel h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.upload-panel p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.upload-panel .upload-filename,
+.upload-panel .upload-error {
+  flex-basis: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.upload-panel .upload-filename {
+  color: var(--ink);
+}
+
+.upload-panel .upload-error {
+  color: #a63e47;
+}
+
+.upload-input {
+  display: none;
 }
 
 .statement-panel {
@@ -181,44 +204,505 @@
   font-weight: 650;
 }
 
-.statement-email-meta {
+.portfolio-details {
+  margin: 20px 22px;
+  padding: 22px;
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  background: #fcfbfe;
+}
+
+.portfolio-details-heading {
   display: flex;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
-  padding: 14px 22px 0;
-  color: var(--muted);
-  font-size: 12px;
+  margin-bottom: 18px;
 }
 
-.statement-email-meta span {
-  overflow: hidden;
+.portfolio-details-heading .eyebrow {
+  margin-bottom: 5px;
+}
+
+.portfolio-details-heading h2 {
+  margin: 0;
   color: var(--ink);
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.4px;
 }
 
-.statement-email-meta time {
-  flex: 0 0 auto;
-}
-
-.statement-snippet {
-  overflow: hidden;
-  padding: 7px 22px 12px;
+.portfolio-fund-count {
   color: var(--muted);
   font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.statement-pdf {
+.portfolio-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.portfolio-snapshot {
+  margin-bottom: 20px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.portfolio-snapshot h3 {
+  margin: 0 0 14px;
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.portfolio-snapshot dl {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.portfolio-snapshot dl div {
+  min-width: 0;
+}
+
+.portfolio-snapshot dt {
+  margin-bottom: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.portfolio-snapshot dd {
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.portfolio-snapshot > p {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.portfolio-chart {
+  margin-bottom: 24px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.portfolio-research {
+  margin-bottom: 24px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.portfolio-research-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.portfolio-research-heading .eyebrow {
+  margin-bottom: 5px;
+}
+
+.portfolio-research-heading h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.portfolio-research-disclosure,
+.portfolio-research-status,
+.portfolio-research-timestamp {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.portfolio-research-disclosure {
+  margin: 12px 0 0;
+}
+
+.portfolio-research-status {
+  margin: 12px 0 0;
+}
+
+.portfolio-research-error {
+  margin: 12px 0 0;
+  color: #a63e47;
+  font-size: 12px;
+}
+
+.portfolio-research-results {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-soft);
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.portfolio-research-market {
+  margin: 0;
+}
+
+.portfolio-research-results ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.portfolio-research-timestamp {
+  margin: 12px 0 0;
+}
+
+.portfolio-research-sources {
+  margin-top: 12px;
+}
+
+.portfolio-research-sources a {
+  color: var(--accent);
+}
+
+.fund-insight {
+  margin: 0 0 16px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgb(255 255 255 / 75%);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.fund-insight h5 {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.fund-insight p {
+  margin: 0 0 10px;
+}
+
+.fund-insight ul {
+  margin: 5px 0 10px;
+  padding-left: 20px;
+}
+
+.fund-insight ul:last-child {
+  margin-bottom: 0;
+}
+
+.portfolio-chart-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.portfolio-chart-heading .eyebrow {
+  margin-bottom: 5px;
+}
+
+.portfolio-chart-heading h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.portfolio-chart-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.portfolio-chart-tab {
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.portfolio-chart-tab[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: #f3f0ff;
+  color: var(--accent);
+}
+
+.portfolio-chart-tab:focus-visible,
+.portfolio-chart-scroll:focus-visible {
+  outline: 3px solid #c9b8ff;
+  outline-offset: 3px;
+}
+
+.portfolio-chart-caption {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.portfolio-chart-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.portfolio-column-chart {
   display: block;
   width: 100%;
-  height: min(78vh, 960px);
-  min-height: 480px;
-  border: 0;
-  border-top: 1px solid var(--border-soft);
-  background: #f2f1f5;
+  min-width: 640px;
+  height: auto;
+}
+
+.chart-grid-line {
+  stroke: #eceaf1;
+  stroke-width: 1;
+}
+
+.chart-zero-line {
+  stroke: #9a96a5;
+  stroke-width: 1.5;
+}
+
+.chart-axis-label,
+.chart-fund-label {
+  fill: var(--muted);
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.chart-value-label {
+  fill: var(--ink);
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.chart-column {
+  cursor: help;
+}
+
+.fund-card {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.fund-card--profit {
+  border-color: #b7dfc4;
+  background: #edf8f0;
+}
+
+.fund-card--loss {
+  border-color: #efc1c4;
+  background: #fff0f0;
+}
+
+.fund-accordion {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.fund-accordion.fund-card--profit {
+  border-color: #b7dfc4;
+  background: #edf8f0;
+}
+
+.fund-accordion.fund-card--loss {
+  border-color: #efc1c4;
+  background: #fff0f0;
+}
+
+.fund-accordion summary {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.fund-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.fund-accordion summary::after {
+  flex: 0 0 auto;
+  color: var(--muted);
+  content: '+';
+  font-size: 19px;
+}
+
+.fund-accordion[open] summary::after {
+  content: '−';
+}
+
+.fund-accordion summary:focus-visible {
+  outline: 3px solid #c9b8ff;
+  outline-offset: -3px;
+}
+
+.fund-accordion summary h4 {
+  min-width: 0;
+  margin: 0;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.fund-accordion .fund-performance {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.fund-accordion-content {
+  padding: 0 16px 16px;
+}
+
+.fund-accordion-content .fund-metrics {
+  margin-top: 14px;
+}
+
+.portfolio-summary-label {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.fund-card h3 {
+  overflow: hidden;
+  margin: 0;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+}
+
+.fund-performance {
+  display: inline-flex;
+  margin: 9px 0 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.fund-performance--profit {
+  background: #d7efdf;
+  color: #236b3c;
+}
+
+.fund-performance--loss {
+  background: #f9dfe1;
+  color: #9c343d;
+}
+
+.fund-performance--neutral {
+  background: #f0eef3;
+  color: #625e6b;
+}
+
+.fund-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
+.fund-metrics div:last-child {
+  grid-column: 1 / -1;
+}
+
+.fund-metrics dt {
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.fund-metrics dd {
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.portfolio-summary-values {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.portfolio-summary-values span {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portfolio-summary-values small {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.portfolio-holdings-title {
+  margin: 26px 0 12px;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.portfolio-holdings-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.portfolio-analysis-state {
+  padding: 20px 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.portfolio-analysis-error {
+  color: #a63e47;
 }
 
 .statement-state {
@@ -234,201 +718,6 @@
   text-align: center;
 }
 
-.statement-error {
-  color: #a63e47;
-}
-
-.statement-error strong {
-  color: #8d2934;
-}
-
-.panel-heading {
-  display: flex;
-  min-height: 58px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 22px;
-  border-bottom: 1px solid var(--border-soft);
-}
-
-.panel-heading h2 {
-  margin: 0;
-  color: var(--ink);
-  font-size: 13px;
-  font-weight: 650;
-}
-
-.inbox-count {
-  font-size: 12px;
-}
-
-.email-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.email-row {
-  position: relative;
-  border-bottom: 1px solid var(--border-soft);
-}
-
-.email-row:last-child {
-  border-bottom: 0;
-}
-
-.email-link {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 15px;
-  padding: 18px 22px;
-  color: inherit;
-  text-decoration: none;
-  transition: background 150ms ease;
-}
-
-.email-link:hover {
-  background: #fbfaff;
-}
-
-.sender-avatar {
-  display: grid;
-  width: 40px;
-  height: 40px;
-  place-items: center;
-  border-radius: 13px;
-  background: var(--avatar-bg, #eee9ff);
-  color: var(--avatar-color, #6649b7);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.email-copy {
-  min-width: 0;
-}
-
-.email-meta {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.email-sender,
-.email-date {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.email-sender {
-  color: var(--ink);
-  font-size: 13px;
-  font-weight: 650;
-}
-
-.email-subject {
-  overflow: hidden;
-  margin: 4px 0 3px;
-  color: var(--ink);
-  font-size: 13px;
-  font-weight: 550;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.email-snippet {
-  overflow: hidden;
-  margin: 0;
-  color: var(--muted);
-  font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.email-date {
-  align-self: start;
-  padding-top: 2px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-.email-row-unread .email-sender,
-.email-row-unread .email-subject {
-  font-weight: 750;
-}
-
-.email-row-unread .email-sender::before {
-  position: absolute;
-  top: 50%;
-  left: 8px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-  content: '';
-  transform: translateY(-50%);
-}
-
-.message-state {
-  display: grid;
-  min-height: 220px;
-  place-items: center;
-  padding: 32px;
-  color: var(--muted);
-  text-align: center;
-}
-
-.message-state p {
-  max-width: 420px;
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.message-state strong {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--ink);
-  font-size: 15px;
-}
-
-.message-state-error {
-  color: #a63e47;
-}
-
-.setup-card {
-  width: min(100%, 500px);
-  margin: 10vh auto 0;
-  padding: 36px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 14px 40px rgb(34 24 65 / 5%);
-}
-
-.setup-card .brand-mark {
-  margin-bottom: 30px;
-}
-
-.setup-card p:last-child {
-  margin: 14px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.setup-card code {
-  padding: 2px 6px;
-  border-radius: 5px;
-  background: #f3f0fa;
-  color: var(--ink);
-  font-family: var(--mono);
-  font-size: 12px;
-}
-
 @media (max-width: 640px) {
   .app-shell {
     padding: 26px 16px;
@@ -438,44 +727,14 @@
     margin-bottom: 38px;
   }
 
-  .connection-status {
+  .portfolio-note {
     font-size: 11px;
   }
 
-  .inbox-heading {
+  .page-heading {
     align-items: flex-start;
     flex-direction: column;
     gap: 18px;
-  }
-
-  .email-link {
-    grid-template-columns: 36px minmax(0, 1fr);
-    gap: 11px;
-    padding: 16px;
-  }
-
-  .sender-avatar {
-    width: 36px;
-    height: 36px;
-  }
-
-  .email-date {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: end;
-    max-width: 82px;
-  }
-
-  .email-meta {
-    padding-right: 88px;
-  }
-
-  .email-row-unread .email-sender::before {
-    left: 5px;
-  }
-
-  .setup-card {
-    padding: 28px 24px;
   }
 
   .statement-heading {
@@ -483,13 +742,56 @@
     flex-direction: column;
   }
 
-  .statement-pdf {
-    height: 70vh;
-    min-height: 380px;
+  .portfolio-details {
+    margin: 16px 12px;
+    padding: 16px;
   }
 
-  .statement-email-meta {
+  .portfolio-details-heading {
+    align-items: flex-start;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
   }
+
+  .portfolio-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-snapshot dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .portfolio-chart {
+    padding: 14px;
+  }
+
+  .portfolio-chart-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .portfolio-research-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .chart-metric {
+    grid-template-columns: 85px minmax(24px, 1fr) 78px;
+    gap: 7px;
+    font-size: 10px;
+  }
+
+  .chart-metric strong {
+    font-size: 10px;
+  }
+}
+
+.statement-source {
+  padding: 0 22px 20px;
+}
+
+.statement-source a {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
 }
