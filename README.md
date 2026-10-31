@@ -31,8 +31,10 @@ ollama run beam:cloud
 
 The app connects to the Ollama service at `http://127.0.0.1:11434` by default.
 Override `OLLAMA_HOST` or `OLLAMA_MODEL` in `.env.local` if needed, then restart
-Vite. Ollama processes cloud prompts and responses to provide the analysis;
-see the [Ollama privacy policy](https://ollama.com/privacy) and
+Vite. For local Ollama cloud mode, use `OLLAMA_MODEL=beam:cloud`; the Ollama
+Cloud API uses the model name `beam`. Ollama processes cloud prompts and
+responses to provide the analysis; see the
+[Ollama privacy policy](https://ollama.com/privacy) and
 [usage plans](https://ollama.com/pricing).
 
 The **Analyze with Ollama** action is explicit and optional. It sends fund
@@ -43,7 +45,8 @@ fund, or global news data is provided. Signals are educational, not trade
 instructions or personalized financial advice. The 12% annual-return goal is
 aspirational and is not guaranteed or forecast; a statement snapshot cannot
 establish suitability without risk tolerance, investment goals, and time
-horizon. The local development/preview endpoint is intended for local use only.
+horizon. The development endpoint is intended for local use; the GKE
+deployment exposes the app only through its internal load balancer.
 
 The PDF password is requested only when needed and is kept in browser memory
 for the current page session. It is not stored in `.env.local` or sent to a
@@ -66,9 +69,42 @@ assess future investments, compare each fund against an appropriate benchmark
 and consider its category, risk, fees, diversification, investment goals, and
 time horizon; those details are not provided by this statement overview.
 
+## GKE deployment
+
+The GitHub Actions workflow builds and publishes the app container, then
+deploys it to the internal GKE load balancer when code is pushed to `master`
+(or when manually started from the Actions tab). The service is reachable only
+from networks that can access the GKE VPC; it does not create a public endpoint.
+
+Before deploying:
+
+1. Enable the Artifact Registry, GKE, and IAM Credentials APIs in project
+   `project-strategy-513311`. Create a regional GKE cluster in `us-central1`
+   and a Docker-format Artifact Registry repository in that region.
+2. Configure GitHub Actions variables `GKE_CLUSTER`, `GAR_REPOSITORY`, and
+   `WIF_PROVIDER`. `WIF_PROVIDER` must be the full Workload Identity Provider
+   resource name. Configure its trust condition to allow this repository,
+   grant the federated identity Artifact Registry Writer and GKE deployment
+   permissions, and ensure it has Kubernetes RBAC permission to deploy in the
+   `portfolio` namespace.
+3. Create a GitHub Actions environment named `production` and add an Ollama
+   Cloud API key as its `OLLAMA_API_KEY` secret. Do not put this key in source
+   files or build arguments. The workflow copies it to a Kubernetes Secret at
+   deploy time, and the app sends it only from the server to Ollama Cloud.
+4. Ensure the GKE nodes can pull from the Artifact Registry repository. The
+   cluster must support an internal `LoadBalancer` service and have outbound
+   HTTPS access to `ollama.com`.
+
+The workflow waits for the deployment rollout and prints the service's
+internal IP. Users must access it from the VPC or a connected network. In the
+deployed app, the portfolio AI review sends fund names and statement-derived
+metrics to Ollama Cloud using the `beam` API model; the uploaded PDF is not
+sent.
+
 ## Available scripts
 
 - `npm run dev` — start the development server
 - `npm run build` — type-check and create a production build
+- `npm start` — serve the production build and AI API
 - `npm run lint` — run Oxlint
 - `npm run preview` — preview the production build

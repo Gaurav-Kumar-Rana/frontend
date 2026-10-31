@@ -5,7 +5,7 @@ import type {
   PortfolioInsightFundInput,
   FundInsightStance,
   PortfolioInsights,
-} from '../src/services/portfolioInsights.ts'
+} from '../src/services/portfolioInsights.js'
 
 const ENDPOINT = '/api/portfolio-insights'
 const MAX_BODY_BYTES = 32 * 1024
@@ -54,9 +54,10 @@ function getResponseFormat(fundCount: number) {
   }
 }
 
-interface OllamaConfig {
+export interface OllamaConfig {
   host: string
   model: string
+  apiKey?: string
 }
 
 interface OllamaResponse {
@@ -278,13 +279,13 @@ function getOllamaErrorMessage(payload: unknown): string | null {
   return payload.error.replace(/\s+/g, ' ').slice(0, 400)
 }
 
-async function handleRequest(
+export async function handlePortfolioInsightsRequest(
   request: IncomingMessage,
   response: ServerResponse,
   config: OllamaConfig,
 ): Promise<void> {
   if (request.method !== 'POST') {
-    sendJson(response, 405, { error: 'Use POST to request local portfolio analysis.' })
+    sendJson(response, 405, { error: 'Use POST to request portfolio analysis.' })
     return
   }
 
@@ -319,7 +320,12 @@ async function handleRequest(
   try {
     upstream = await fetch(`${config.host}/api/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(config.apiKey
+          ? { Authorization: `Bearer ${config.apiKey}` }
+          : {}),
+      },
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       body: JSON.stringify({
         model: config.model,
@@ -409,25 +415,31 @@ async function handleRequest(
   })
 }
 
-function isLoopbackHost(host: string): boolean {
+export function isAllowedOllamaConfig(config: OllamaConfig): boolean {
   try {
-    const url = new URL(host)
+    const url = new URL(config.host)
     const hostname = url.hostname.replace(/^\[|\]$/g, '')
-    return (
+    const loopback =
       url.protocol === 'http:' &&
       ['localhost', '127.0.0.1', '::1'].includes(hostname) &&
       !url.username &&
       !url.password
-    )
+    const ollamaCloud =
+      url.protocol === 'https:' &&
+      hostname === 'ollama.com' &&
+      !url.username &&
+      !url.password &&
+      Boolean(config.apiKey)
+    return loopback || ollamaCloud
   } catch {
     return false
   }
 }
 
 export function localPortfolioInsightsPlugin(config: OllamaConfig): Plugin {
-  if (!isLoopbackHost(config.host)) {
+  if (!isAllowedOllamaConfig(config)) {
     throw new Error(
-      'OLLAMA_HOST must be a local HTTP address such as http://127.0.0.1:11434.',
+      'OLLAMA_HOST must be a local HTTP address or https://ollama.com with OLLAMA_API_KEY configured.',
     )
   }
 
@@ -442,7 +454,7 @@ export function localPortfolioInsightsPlugin(config: OllamaConfig): Plugin {
       return
     }
 
-    void handleRequest(request, response, config).catch((error: unknown) => {
+    void handlePortfolioInsightsRequest(request, response, config).catch((error: unknown) => {
       next(
         error instanceof Error
           ? error

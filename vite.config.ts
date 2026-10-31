@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
       localPortfolioInsightsPlugin({
         host: process.env.OLLAMA_HOST ?? env.OLLAMA_HOST ?? 'http://127.0.0.1:11434',
         model: process.env.OLLAMA_MODEL ?? env.OLLAMA_MODEL ?? 'beam:cloud',
+        apiKey: process.env.OLLAMA_API_KEY ?? env.OLLAMA_API_KEY,
       }),
     ],
     server: {
